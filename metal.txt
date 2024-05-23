@@ -1,0 +1,77 @@
+
+# Usually, it is a good to apply genomic control to each
+# input file. However, in this example, all the markers being
+# examined reside in strongly associated loci and it probably 
+# is not a good idea. To find out what happens if you turn
+# on genomic control, uncomment the following line.
+# GENOMICCONTROL ON
+
+# To help identify allele flips, it can be useful to track
+# allele frequencies in the meta-analysis. To enable this
+# capability, uncomment the following two lines.
+# AVERAGEFREQ ON
+# MINMAXFREQ ON
+
+# To restric meta-analysis to two previously reported SNPs
+# and summarize study specific results, uncomment the two
+# lines that follow.
+# ADDFILTER SNP IN (rs10830963,rs563694)
+# VERBOSE ON
+
+SCHEME STDERR
+AVERAGEFREQ ON
+TRACKPOSITIONS ON
+GENOMICCONTROL ON
+
+# Describe and process the DGI input files
+MARKER   rsids
+ALLELE   ref alt
+FREQ     af_alt
+EFFECT   beta
+STDERR   sebeta
+PVAL     pval
+FREQLABEL af_alt
+CHROMOSOME chrom
+POSITION pos
+
+PROCESS finngen_PTSD
+
+
+# Describe and process the SardiNIA input files
+MARKER   SNP
+ALLELE   A1 A2
+EFFECT   log(OR)
+STDERR   SE
+PVAL     P
+FREQLABEL af_alt
+CHROMOSOME CHR
+POSITION BP
+
+PROCESS pts_aam_freeze2_overall.results.adj
+
+# Describe and process the SardiNIA input files
+MARKER   SNP
+ALLELE   A1 A2
+EFFECT   log(OR)
+STDERR   SE
+PVAL     P
+FREQLABEL af_alt
+CHROMOSOME CHR
+POSITION BP
+
+PROCESS pts_eur_freeze2_overall.results.adj
+
+# Describe and process the SardiNIA input files
+MARKER   SNP
+ALLELE   A1 A2
+EFFECT   log(OR)
+STDERR   SE
+PVAL     P
+FREQLABEL af_alt
+CHROMOSOME CHR
+POSITION BP
+
+PROCESS pts_lat_freeze2_overall.results.adj
+
+# Execute meta-analysis
+ANALYZE
