@@ -1,6 +1,10 @@
 post GWAS analysis for PTSD project
 =============================================
 
+Step 0:data collection.
+------------------------
+The two cohorts were obtained from the [PGC](https://pgc.unc.edu/for-researchers/download-results/) and [FINNGEN](https://finngen.gitbook.io/documentation/v/r8/data-description) databases.
+
 Step 1: meta analysis
 ------------------------
 Tool: [Metal](https://csg.sph.umich.edu/abecasis/metal/).
@@ -11,3 +15,4 @@ The METAL software is designed to facilitate meta-analysis of large datasets (su
 ```
 metal metal.txt
 ```
+
