@@ -1,1 +1,11 @@
+post GWAS analysis for PTSD project
+=============================================
 
+Step 1: meta analysis
+------------------------
+Tool: [Metal](https://csg.sph.umich.edu/abecasis/metal/)
+
+Converting sra format files to fastq format
+```
+metal metal.txt
+```
