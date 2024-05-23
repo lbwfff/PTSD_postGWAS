@@ -5,6 +5,14 @@ Step 0:data collection.
 ------------------------
 The two cohorts were obtained from the [PGC](https://pgc.unc.edu/for-researchers/download-results/) and [FINNGEN](https://finngen.gitbook.io/documentation/v/r8/data-description) databases.
 
+Adjusting the data structure, effect allele frequency was manually calculated for PGC data. The formula is: (Frequency of coded allele in cases*Number of cases+Frequency of coded allele in controls*Number of controls)/(Number of cases+Number of controls).
+Example:
+```
+awk 'BEGIN {FS=OFS="\t"} NR==1 {header=$0; print $0; next} {Nca=$17; FRQ_A_4363=$6; Nco=$18; FRQ_U_10976=$7; if ((Nca + Nco) != 0) {af_alt = (Nca * FRQ_A_4363 + Nco * FRQ_U_10976) / (Nca + Nco)} else {af_alt = 0}; print $0, af_alt}' pts_lat_freeze2_overall.results > pts_lat_freeze2_overall.results.adj
+sed -i '1s/$/\taf_alt/' pts_lat_freeze2_overall.results.adj
+```
+Simple adjustment of column names for FINNGEN data.
+
 Step 1: meta analysis
 ------------------------
 Tool: [Metal](https://csg.sph.umich.edu/abecasis/metal/).
