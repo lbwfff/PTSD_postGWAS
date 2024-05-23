@@ -31,3 +31,6 @@ AVERAGEFREQ ON
 TRACKPOSITIONS ON
 GENOMICCONTROL ON
 ```
+
+Step 2:
+------------------------
