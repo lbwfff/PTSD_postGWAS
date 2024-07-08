@@ -53,8 +53,6 @@ result <- MR_and_coloc('./testExi.ENSG00000182481.10.txt','PTSD','./test',
 ```
 
 Parameters to be provided by MR_and_coloc include: 
-smrfile: SMR output, trait_name: outcome name, e.g. "PTSD", plotpath: folder to save plots, n_qtl: number of samples of qtl data, n_ gwas: number of samples in gwas data, g_version: gene version (37 or 38) of qtl data.                 
-
-Parameters to be added: clump_r2, SNP.PP.H4, etc.
+smrfile: SMR output, trait_name: outcome name, e.g. "PTSD", plotpath: folder to save plots, n_qtl: number of samples of qtl data, n_ gwas: number of samples in gwas data, g_version: gene version (37 or 38) of qtl data. 
 
 
