@@ -25,6 +25,8 @@ library('ieugwasr')
 library('patchwork')
 library('geni.plots')
 library('plinkbinr')
+library('MetBrewer')
+library('cowplot')
 
 # parameters for plot
 genemove = 0.01; txt=1.1;  cex =1.3; lab=1.1; axis=1; top_cex=1.2;
@@ -566,7 +568,7 @@ make_mvmr_input <- function(exposure_dat, outcome.id.mrbase=NULL, outcome.data=N
 
 MR_and_coloc <- function (SMRfile,trait_name,plotpath,
                           n_qtl,n_gwas,g_version,all_outcome,
-                          bfile) {
+                          bfile,clump_r2=0.2,exposure_p=10^-6) {
   
   table<-list()
   
@@ -620,9 +622,9 @@ MR_and_coloc <- function (SMRfile,trait_name,plotpath,
   
   coloc<-merge(exp_dat,outcome,by=c('SNP'))
   
-  exp_dat<-exp_dat[exp_dat$pval.exposure<(10^-6),]
+  exp_dat<-exp_dat[exp_dat$pval.exposure<(exposure_p),]
   
-  clump <- ieugwasr::ld_clump(clump_r2=0.2,
+  clump <- ieugwasr::ld_clump(clump_r2=clump_r2,
                               dplyr::tibble(rsid=exp_dat$SNP, pval=exp_dat$pval.exposure, id='test'),
                               plink_bin = plinkbinr::get_plink_exe(),
                               bfile = bfile)
@@ -722,10 +724,33 @@ MR_and_coloc <- function (SMRfile,trait_name,plotpath,
           legend.text = element_text(size = 18))+
     theme(aspect.ratio=1)
   
+  result_2smr <- res %>%
+    split_outcome() %>%
+    separate(outcome, "outcome", sep="[(]") %>% 
+    mutate(outcome=stringr::str_trim(outcome))%>% 
+    generate_odds_ratios() %>% 
+    select(-id.exposure, -id.outcome) %>% 
+    tidy_pvals()
+  
+  result_2smr$outcome<-c(' ')
+  
+  plot[[5]]<-
+  ggplot(result_2smr, aes(y=outcome, x=or,  colour=method)) + 
+    geom_errorbarh(aes(xmin=or_lci95, xmax=or_uci95), height=.3) +
+    geom_point(size=2)+
+    # xlim(0,2)+
+    scale_color_manual(values=MetBrewer::met.brewer("VanGogh1", 5,type ='discrete'))+
+    geom_vline(xintercept=1, linetype=3) +
+    theme_minimal_hgrid(10, rel_small = 1) +
+    facet_wrap(~method, ncol=1)+
+    labs(color = "",y = "", x = "Odds Ratio",
+         title= paste0("Univariate MR results for ",
+                       trait_name ,", 95% CI") )+
+    theme(legend.position = "none")
   
   path<-paste0(plotpath,'/',trait_name,'_',SMRData[["SMR"]]$V4[SMRData[["SMR"]]$V1==probe],'.Twosample_MR_Plot.pdf')
   
-  pdf(path,width = 12,height = 8)
+  pdf(path,width = 15,height = 10)
   print(wrap_plots(plot,nrow=2) )
   dev.off()
 
@@ -785,8 +810,3 @@ MR_and_coloc <- function (SMRfile,trait_name,plotpath,
   return(table)
 
 }
-
-
-
-
-
