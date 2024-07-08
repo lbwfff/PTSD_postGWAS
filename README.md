@@ -34,3 +34,24 @@ GENOMICCONTROL ON
 
 Step 2:
 ------------------------
+
+
+Step X: TwoSampleMR and colocalisation analysis
+------------------------
+
+```
+all_outcome<-data.table::fread('finngen/finngen_PTSD')
+all_outcome<-data.frame(rsids=c(all_outcome$rsids),
+                        af_alt=c(all_outcome$af_alt))
+
+source('MR_and_coloc.R')
+
+result<-MR_and_coloc('./testExi.ENSG00000182481.10.txt','PTSD','./test',
+             2860,400000,37,all_outcome,'./clump/1kg.v3/EUR')
+```
+
+
+
+
+
+
