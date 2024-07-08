@@ -38,6 +38,8 @@ Step 2:
 
 Step X: TwoSampleMR and colocalisation analysis
 ------------------------
+MR_and_coloc.R allows twosample MR as well as colocalization analysis based on SMR output.
+Additional information on the MAF value of the outcome data is required. all_outcome is a data frame with two columns: rsids and af_alt.
 
 ```
 all_outcome<-data.table::fread('finngen/finngen_PTSD')
@@ -46,11 +48,12 @@ all_outcome<-data.frame(rsids=c(all_outcome$rsids),
 
 source('MR_and_coloc.R')
 
-result<-MR_and_coloc('./testExi.ENSG00000182481.10.txt','PTSD','./test',
+result <- MR_and_coloc('./testExi.ENSG00000182481.10.txt','PTSD','./test',
              2860,400000,37,all_outcome,'./clump/1kg.v3/EUR')
 ```
 
-
+Parameters to be provided by MR_and_coloc include: 
+smrfile: SMR output, trait_name: outcome name, e.g. "PTSD", plotpath: folder to save plots, n_qtl: number of samples of qtl data, n_ gwas: number of samples in gwas data, g_version: gene version (37 or 38) of qtl data.                 
 
 
 
