@@ -31,9 +31,63 @@ AVERAGEFREQ ON
 TRACKPOSITIONS ON
 GENOMICCONTROL ON
 ```
+The following segment defines the parameters for processing genetic marker data from two datasets, which in this case are the FINNGEN and PGC PTSD data. It specifies marker identifiers, alleles, effect sizes, standard errors, p-values, allele frequencies, chromosome locations, and genomic positions for each dataset. Each column was filled in with its corresponding column in the database. Following data processing using these parameters, a meta-analysis is executed to synthesize findings across both datasets.
 
-Step 2:
+```
+# Describe and process the SardiNIA input files
+MARKER   rsids
+ALLELE   ref alt
+EFFECT   beta
+STDERR   sebeta
+PVAL     pval
+FREQLABEL af_alt
+CHROMOSOME chrom
+POSITION pos
+
+PROCESS FINNGEN
+
+# Describe and process the SardiNIA input files
+MARKER   SNP
+ALLELE   A1 A2
+EFFECT   log(OR)
+STDERR   SE
+PVAL     P
+FREQLABEL FRQ_A_
+CHROMOSOME CHR
+POSITION BP
+
+PROCESS PGCPTSD
+
+# Execute meta-analysis
+ANALYZE
+```
+
+Step 2: Post Meta-analysis GWAS
 ------------------------
+Tool: [gwaslab](https://github.com/Cloufield/gwaslab/).
+References：[GWASlab](https://cloufield.github.io/gwaslab/).
+
+gwaslab is a comprehensive tool designed for Genome-Wide Association Studies (GWAS) to perform statistical analyses, visualize genomic data in manhattan and qq plots, and interpret genetic associations.
+
+```
+import gwaslab as gl
+```
+To conduct a GWAS using the meta-analysis file, ensure that its columns correspond precisely to the parameters specified in gwaslab.
+```
+mysumstats =gl.Sumstats("METAANALYSIS1.TBL",
+                        rsid="MarkerName",
+                         ea="Allele1",
+                         chrom='Chromosome',
+                         pos="Position",
+                         nea="Allele2",                        
+                         beta="Effect",
+                         se="StdErr",
+                         p="P-value",
+                         direction="Direction",
+                         build="38")
+```
+Complete tutorial for next steps is found on https://cloufield.github.io/gwaslab/tutorial_3.4/.
+The p-value threshold used is 1e-6.
 
 
 Step X: TwoSampleMR and colocalisation analysis
